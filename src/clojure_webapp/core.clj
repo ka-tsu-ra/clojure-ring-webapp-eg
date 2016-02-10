@@ -1,13 +1,12 @@
 (ns clojure-webapp.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+;; now any http request will return the request itself.
+;; start server and browse to eg localhost:3000/uri_test?test=1 and see the request printed out.
+;; nb no params or cookies maps in there. they can be coerced using middleware.
 
-;; at the moment any http request will return "Hello Clojure"
 (defn example-handler [request]
-  {:body "Hello Clojure!"})
+ {:body (pr-str request)}
+ )
 
 ;; specify the names of these functions in the project.clj file in the ring handler section
 ;; so that they run when you start up and close the server
@@ -16,3 +15,8 @@
 
 (defn on-destroy []
   (:println "Destroying sample webapp!"))
+
+(defn foo 
+  "I don't do a whole lot"
+  [x]
+  (println x "Hello, world!"))
