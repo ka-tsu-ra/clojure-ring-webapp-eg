@@ -1,15 +1,11 @@
 (ns clojure-webapp.core)
 
-;; now any http request will return the request itself.
-;; start server and browse to eg localhost:3000/uri_test?test=1 and see the request printed out.
-;; nb no params or cookies maps in there. they can be coerced using middleware.
+;; now any http request will return the contents of the file test.txt
 
 (defn example-handler [request]
- {:body (pr-str request)}
+ {:body (java.io.File. "test.txt")}
  )
 
-;; specify the names of these functions in the project.clj file in the ring handler section
-;; so that they run when you start up and close the server
 (defn on-init []
   (:println "Initializing sample webapp!"))
 
