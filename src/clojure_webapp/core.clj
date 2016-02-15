@@ -1,9 +1,6 @@
 (ns clojure-webapp.core)
 
-;; can use 'headers' keyword to set some headers.
-;; now any http request will result in redirect to the url specified
-;; changed status code to 301 - moved permanently.
-;; try curl -v http://localhost:3000 to see it
+;; Now project.clj directs http requests to be routed according to function 'route-handler'.
 
 (defn example-handler [request]
  {:headers {"Location" "http://www.ft.com"
@@ -21,3 +18,18 @@
   "I don't do a whole lot"
   [x]
   (println x "Hello, world!"))
+
+(defn test1-handler [request]
+ {:body "test1"})
+
+(defn test2-handler [request]
+ {:status 301 
+  :headers {"Location" "http://www.ft.com"}})
+
+(defn route-handler [request]
+ (condp = (:uri request)
+  "/test1" (test1-handler request)
+  "/test2" (test2-handler request)
+  nil))
+
+;; browse to localhost:3000/test1 and localhost:3001/test2 to see it.
