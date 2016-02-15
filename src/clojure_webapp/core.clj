@@ -1,12 +1,14 @@
 (ns clojure-webapp.core)
 
-;; now any http request will return the contents of the file test.txt
-;; can specify a status code. 500 will return that error code instead of a 200. response body stays the same.
+;; can use 'headers' keyword to set some headers.
+;; now any http request will result in redirect to the url specified
+;; changed status code to 301 - moved permanently.
 ;; try curl -v http://localhost:3000 to see it
 
 (defn example-handler [request]
- {:body (java.io.File. "test.txt")
-  :status 500}
+ {:headers {"Location" "http://www.ft.com"
+	    "Set-cookie" "test=1"}
+  :status 301}
  )
 
 (defn on-init []
