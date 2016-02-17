@@ -23,6 +23,7 @@
   (println x "Hello, world!"))
 
 (defn test1-handler [request]
+ (throw (RuntimeException. "error!"))
  {:body "test1"})
 
 (defn test2-handler [request]
@@ -41,10 +42,15 @@
 ;; can still browse to localhost:3000/test1 and localhost:3001/test2
 
 (defn wrapping-handler [request]
- (if-let [resp (route-handler request)]
-  resp
-  {:status 404 :body (str "Not found: " (:uri request))}))
-
+ (try
+  (if-let [resp (route-handler request)]
+   resp
+   {:status 404 :body (str "Not found: " (:uri request))})
+  (catch Throwable e
+   {:status 500 :body (apply str (interpose "\n" (.getStackTrace e)))})))
+ 
+;; Now, if there's an error, the stacktrace will render in the browser. 
+;; Test1-handler has been hardwired to throw a runtime error. Browse to /test1 to see it.
 ;; wrapping handler says if there's a response to the request out of the route-handler function, return the response. Is 'resp' a keyword??
 ;; otherwise, return the status 404 with the string above.
 ;; NB set wrapping-handler as the :ring :handler in project.clj. So now it is the mutha handler function.
