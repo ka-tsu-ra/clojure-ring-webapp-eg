@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
 		[ring "1.2.0"]]
   :plugins [[lein-ring "0.8.7"]]
-  :ring {:handler clojure-webapp.core/route-handler
+  :ring {:handler clojure-webapp.core/wrapping-handler
 	 :init	  clojure-webapp.core/on-init
 	 :port	  3000
 	 :destroy clojure-webapp.core/on-destroy})

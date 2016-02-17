@@ -39,3 +39,13 @@
 ;; Reference the shortcut set in the require at the top using the :as keyword, ie handlers.
 ;; browsing to /test3 makes the handler function in separate file kick in.
 ;; can still browse to localhost:3000/test1 and localhost:3001/test2
+
+(defn wrapping-handler [request]
+ (if-let [resp (route-handler request)]
+  resp
+  {:status 404 :body (str "Not found: " (:uri request))}))
+
+;; wrapping handler says if there's a response to the request out of the route-handler function, return the response. Is 'resp' a keyword??
+;; otherwise, return the status 404 with the string above.
+;; NB set wrapping-handler as the :ring :handler in project.clj. So now it is the mutha handler function.
+ 
