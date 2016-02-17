@@ -1,6 +1,9 @@
-(ns clojure-webapp.core)
+(ns clojure-webapp.core
+ (:require [clojure-webapp.handlers :as handlers]))
 
-;; Now project.clj directs http requests to be routed according to function 'route-handler'.
+;; require in the 3rd handler function which is in the separate file src/clojure-webapp/handlers.clj.
+;; Reference it using its namespace.
+;; Rem project.clj directs http requests to be routed according to function 'route-handler'.
 
 (defn example-handler [request]
  {:headers {"Location" "http://www.ft.com"
@@ -14,7 +17,7 @@
 (defn on-destroy []
   (:println "Destroying sample webapp!"))
 
-(defn foo 
+(defn foo
   "I don't do a whole lot"
   [x]
   (println x "Hello, world!"))
@@ -23,13 +26,16 @@
  {:body "test1"})
 
 (defn test2-handler [request]
- {:status 301 
+ {:status 301
   :headers {"Location" "http://www.ft.com"}})
 
 (defn route-handler [request]
  (condp = (:uri request)
   "/test1" (test1-handler request)
   "/test2" (test2-handler request)
+  "/test3" (handlers/handler3 request)
   nil))
 
-;; browse to localhost:3000/test1 and localhost:3001/test2 to see it.
+;; Reference the shortcut set in the require at the top using the :as keyword, ie handlers.
+;; browsing to /test3 makes the handler function in separate file kick in.
+;; can still browse to localhost:3000/test1 and localhost:3001/test2
